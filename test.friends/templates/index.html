@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <title>Test Friends App</title>
+  </head>
+  <body>
+    <h1>Hello, {{ name }}!</h1>
+    <h2>Meet you friends</h2>
+    <ul>
+    {% for friend in friends %}
+        <li><img src="{{ friend.picture.data.url }}" />{{ friend.name }}</li>
+    {% endfor %}
+    </ul>
+  </body>
+</html>
