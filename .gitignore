@@ -1,0 +1,4 @@
+.noseids
+*.pyc
+*~
+.venv
