@@ -3,7 +3,16 @@
 ## Getting Started
 
 ### Development
-Setup a virtualenv
+Make sure the following environment variables have been set:
+
+    export APP_SECRET_KEY='my-secret-key'
+    export APP_FACEBOOK_APP_ID='yourappid'
+    export APP_FACEBOOK_APP_SECRET='your app secret'
+
+A convenient way to do this is in your virtualenvs activate script,
+or as a standalone `.env` file that you manually source
+
+Setup a virtualenv, e.g:-
 
     virtualenv .venv && . .venv/bin/activate
 
@@ -16,3 +25,5 @@ Run flake8, and the tests
 
     flake8 --exclude .venv
     nosetests
+
+#!/bin/bash
