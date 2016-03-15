@@ -3,7 +3,7 @@ import json
 
 from flask import (
     Flask, redirect, url_for, session, request,
-    render_template, Response
+    render_template, Response, abort
 )
 import flask.ext.login as flask_login
 from flask_oauth import OAuth
@@ -19,7 +19,7 @@ oauth = OAuth()
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
-users = {'david': {'pw': 'david'}}
+users = {'david@test.com': {'pw': 'david'}}
 
 FACEBOOK_APP_ID = os.getenv('APP_FACEBOOK_APP_ID')
 FACEBOOK_APP_SECRET = os.getenv('APP_FACEBOOK_APP_SECRET')
@@ -96,7 +96,7 @@ def logout():
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-    return 'Unauthorized'
+    return abort(401)
 
 
 @app.route('/protected')
