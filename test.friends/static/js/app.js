@@ -1,7 +1,10 @@
 var Friend = React.createClass({
   render: function() {
       return (
-        <li className="list-group-item">{this.props.name}</li>
+      <li className="list-group-item">
+          <img src={this.props.pic} />
+          {this.props.name}
+      </li>
     );
   }
 });
@@ -41,9 +44,7 @@ var FriendList = React.createClass({
   render: function() {
     var friendNodes = this.props.data.map(function(friend) {
       return (
-        <Friend name={friend.name} key={friend.id}>
-          {friend.text}
-        </Friend>
+        <Friend name={friend.name} pic={friend.picture.data.url} />
       );
     });
     return (
