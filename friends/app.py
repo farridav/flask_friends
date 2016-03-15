@@ -70,13 +70,7 @@ def request_loader(request):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return '''
-        <form action='login' method='POST'>
-        <input type='text' name='email' id='email' placeholder='email'></input>
-        <input type='password' name='pw' id='pw' placeholder='password'></input>
-        <input type='submit' name='submit'></input>
-        </form>
-        '''
+        return render_template('login.html')
 
     email = request.form['email']
     if email in users and request.form['pw'] == users[email]['pw']:
@@ -85,13 +79,22 @@ def login():
         flask_login.login_user(user)
         return redirect(url_for('protected'))
 
-    return 'Bad login'
+    return abort(403)
 
 
 @app.route('/logout')
 def logout():
+    user_id = getattr(
+        flask_login.current_user, 'id',
+        'Anonymous'
+    )
     flask_login.logout_user()
-    return 'Logged out'
+    return render_template('basic.html', **{
+        'page_title': 'Logged Out',
+        'content': 'Bye {}'.format(
+            user_id
+        )
+    })
 
 
 @login_manager.unauthorized_handler
@@ -102,7 +105,12 @@ def unauthorized_handler():
 @app.route('/protected')
 @flask_login.login_required
 def protected():
-    return 'Logged in as: ' + flask_login.current_user.id
+    return render_template('basic.html', **{
+        'page_title': 'Logged In',
+        'content': 'Welcome {}'.format(
+            flask_login.current_user.id
+        )
+    })
 
 
 def get_friends():
@@ -153,7 +161,7 @@ def index():
     if 'oauth_token' not in session:
         return redirect(url_for('social_login'))
 
-    return render_template('index.html')
+    return render_template('home.html')
 
 
 @app.route('/social-login')
