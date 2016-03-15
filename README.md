@@ -24,6 +24,4 @@ Install the requirements and the test requirements
 Run flake8, and the tests
 
     flake8 --exclude .venv
-    nosetests
-
-#!/bin/bash
+    ./tests.py

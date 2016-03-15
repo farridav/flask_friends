@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 from friends.app import app
 import unittest
