@@ -1,20 +1,24 @@
 import os
+import json
 
 from flask import (
     Flask, redirect, url_for, session, request,
-    render_template
+    render_template, Response
 )
 from flask_oauth import OAuth
 
 
 DEBUG = True
-FACEBOOK_APP_ID = os.getenv('APP_FACEBOOK_APP_ID')
-FACEBOOK_APP_SECRET = os.getenv('APP_FACEBOOK_APP_SECRET')
+THIS_DIR = os.path.dirname(__file__)
 
 app = Flask(__name__)
 app.debug = DEBUG
 app.secret_key = os.getenv('APP_SECRET_KEY')
 oauth = OAuth()
+
+FACEBOOK_APP_ID = os.getenv('APP_FACEBOOK_APP_ID')
+FACEBOOK_APP_SECRET = os.getenv('APP_FACEBOOK_APP_SECRET')
+FACEBOOK_MAX_PAGER = 10
 
 facebook = oauth.remote_app(
     'facebook',
@@ -28,17 +32,55 @@ facebook = oauth.remote_app(
 )
 
 
+def get_friends():
+    """
+    Get Our friends list, and keep following next hyperlinks until we have
+    exhausted the API (or we hit our pager limit)
+    """
+
+    cache = os.path.join(THIS_DIR, 'cache.json')
+
+    if os.path.isfile(cache):
+        data = json.load(open(cache))
+        return {
+            'name': data['name'],
+            'friends': data['taggable_friends']['data'],
+        }
+
+    # Populate cache
+    pager = 0
+    data = facebook.get(
+        '/me/?fields=name,friends,taggable_friends{name,picture{url}}&limit=100'
+    ).data
+
+    friends = data['taggable_friends']['data']
+
+    while (len(friends) < int(data['friends']['summary']['total_count'])
+           and pager < FACEBOOK_MAX_PAGER):
+        friends.extend(facebook.get(
+            data['taggable_friends']['paging']['next']
+        ).data['data'])
+
+        pager += 1
+
+    with open(cache, 'wb+') as f:
+        f.write(json.dumps(data))
+
+    return {
+        'name': data['name'],
+        'friends': data['taggable_friends']['data'],
+    }
+
+
 @app.route('/')
 def index():
+    """
+    Make sure we are authed with facebook, then render our app
+    """
     if 'oauth_token' not in session:
         return redirect(url_for('login'))
 
-    me = facebook.get('/me/?fields=name,taggable_friends{name,picture{url}}')
-
-    return render_template('index.html', **{
-        'name': me.data['name'],
-        'friends': me.data['taggable_friends']['data']
-    })
+    return render_template('index.html')
 
 
 @app.route('/login')
@@ -59,6 +101,7 @@ def facebook_authorized(resp):
             request.args['error_description']
         )
 
+    # TODO: persist this into the db?
     session['oauth_token'] = (resp['access_token'], '')
 
     return redirect(url_for('index'))
@@ -67,6 +110,23 @@ def facebook_authorized(resp):
 @facebook.tokengetter
 def get_facebook_oauth_token():
     return session.get('oauth_token')
+
+
+# API Routes
+@app.route('/api/friends')
+def friends():
+    """
+    Endpoint for retrieving our friends list
+    """
+    friends = get_friends()
+    return Response(
+        json.dumps(friends),
+        mimetype='application/json',
+        headers={
+            'Cache-Control': 'no-cache',
+            'Access-Control-Allow-Origin': '*'
+        }
+    )
 
 
 if __name__ == '__main__':
