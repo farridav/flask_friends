@@ -47,8 +47,8 @@ class AppTestCase(unittest.TestCase):
         response = self.login(email, 'david')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            'Logged in as: {}'.format(email), response.data
+        self.assertIn(
+            'Welcome {}'.format(email), response.data
         )
 
     def test_protected_view_accessible(self):
