@@ -1,3 +1,6 @@
+$('[href]').parent().removeClass('active');
+$('[href="' + document.location.pathname + '"]').parent().addClass('active');
+
 var Friend = React.createClass({
   render: function() {
       return (
