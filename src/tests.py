@@ -35,6 +35,7 @@ class AppTestCase(unittest.TestCase):
         Our protected view, is
         """
         response = self.app.get('/protected')
+        import ipdb; ipdb.set_trace()
 
         self.assertEqual(response.status_code, 401)
 
@@ -59,7 +60,3 @@ class AppTestCase(unittest.TestCase):
         response = self.app.get('/protected')
 
         self.assertEqual(response.status_code, 200)
-
-
-if __name__ == '__main__':
-    unittest.main()

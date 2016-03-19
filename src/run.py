@@ -1,4 +1,4 @@
-#!env/bin/python
+#!/usr/bin/env python
 
 from friends import app
 from friends.views import (
