@@ -15,16 +15,13 @@ Setup a virtualenv, e.g:-
 
     virtualenv .venv && . .venv/bin/activate
 
-Make sure you have the right [system packages](http://googlecloudplatform.github.io/gcloud-python/stable/) for gcloud
+Install the requirements
 
-Install the requirements and the test requirements
-
-    pip install -r requirements.txt
-    pip install -r test-requirements.txt
+    pip install -r dev-requirements.txt -t src/lib
 
 ### Google Cloud platform
-This project has been built to work with Googles cloud platform,
-to interact with this in development, follow the guide [here](https://cloud.google.com/datastore/docs/tools/)
+This project has been built to work with Googles cloud platform, to interact with
+this in development, follow the guide [here](https://cloud.google.com/datastore/docs/tools/)
 ensuring you Install the following SDK's:
 
     https://cloud.google.com/sdk/#deb
@@ -33,11 +30,6 @@ ensuring you Install the following SDK's:
 Now setup gcloud with:
 
     gcloud init
-
-install requirements here
-
-    pip install -r requirements.txt -t src/lib/
-
 
 ## Running
 To run this project with all of the mock appengine resources from the appengine SDK, use:

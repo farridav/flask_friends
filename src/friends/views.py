@@ -2,7 +2,7 @@ import json
 
 from flask import (
     redirect, url_for, session, request,
-    render_template, Response, abort
+    render_template, Response
 )
 from flask.views import View
 
@@ -37,6 +37,7 @@ class Login(View):
             'page_title': 'Access Denied',
             'content': 'Wrong username and/or password'
         })
+
 
 class Logout(View):
 

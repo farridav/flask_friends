@@ -4,12 +4,16 @@ import os
 import sys
 import unittest
 
-import yaml
-from flake8.engine import get_style_guide
-from flake8.main import DEFAULT_CONFIG, print_report
-
 THIS_DIR = os.path.dirname(__file__)
 ENV_YML = os.path.join(THIS_DIR, 'env.yaml')
+
+# Add our library paths
+sys.path.insert(1, os.path.join(THIS_DIR, 'lib'))
+sys.path.insert(1, os.path.join(THIS_DIR, 'friends'))
+
+import yaml  # NOQA
+from flake8.engine import get_style_guide  # NOQA
+from flake8.main import DEFAULT_CONFIG, print_report  # NOQA
 
 with open(ENV_YML) as env_file:
     env = yaml.load(env_file.read())
@@ -17,12 +21,14 @@ with open(ENV_YML) as env_file:
 for key, value in env.iteritems():
     os.environ.setdefault(key, value)
 
+# Add the app engin SDK path
 sys.path.insert(0, os.getenv('SDK_PATH'))
-sys.path.insert(1, os.path.join(THIS_DIR, 'lib'))
-sys.path.insert(1, os.path.join(THIS_DIR, 'friends'))
+
+# Only now can we import our app as it uses appengine
+# libs
+import friends  # NOQA
 
 import dev_appserver  # NOQA
-import friends  # NOQA
 
 dev_appserver.fix_sys_path()
 
