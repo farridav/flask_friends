@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-from friends.app import app
+from friends import app
 import unittest
 import tempfile
 
@@ -9,7 +9,6 @@ import tempfile
 class AppTestCase(unittest.TestCase):
 
     def setUp(self):
-        app.config['TESTING'] = True
         self.app = app.test_client()
 
     def login(self, email, pw):
