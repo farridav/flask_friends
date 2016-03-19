@@ -35,10 +35,6 @@ Now setup gcloud with:
 
     gcloud init
 
-Now run the data store emulator with:
-
-    gcloud beta emulators datastore start
-
 ### Testing
 
 Run flake8, and the tests with:
