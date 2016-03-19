@@ -33,8 +33,10 @@ class Login(View):
             flask_login.login_user(user)
             return redirect(url_for('friends'))
 
-        return abort(403)
-
+        return render_template('basic.html', **{
+            'page_title': 'Access Denied',
+            'content': 'Wrong username and/or password'
+        })
 
 class Logout(View):
 
