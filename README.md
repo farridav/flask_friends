@@ -22,15 +22,6 @@ Install the requirements and the test requirements
     pip install -r requirements.txt
     pip install -r test-requirements.txt
 
-### Running
-To run this project with all of the mock appengine resources from the appengine SDK, use:
-
-    dev_appserver.py src/
-
-To run it directly use:
-
-    python src/run.py
-
 ### Google Cloud platform
 This project has been built to work with Googles cloud platform,
 to interact with this in development, follow the guide [here](https://cloud.google.com/datastore/docs/tools/)
@@ -47,6 +38,11 @@ install requirements here
 
     pip install -r requirements.txt -t src/lib/
 
+
+## Running
+To run this project with all of the mock appengine resources from the appengine SDK, use:
+
+    dev_appserver.py src/
 
 ### Testing
 
