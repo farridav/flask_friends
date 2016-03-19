@@ -1,40 +1,46 @@
-from friends import app
+from google.appengine.ext import ndb
 
-from flask import url_for, redirect
+from flask import abort, url_for, redirect
 import flask.ext.login as flask_login
 
-login_manager = flask_login.LoginManager()
-login_manager.init_app(app)
-
-users = {'david@test.com': {'pw': 'david'}}
+from . import login_manager
 
 
-class User(flask_login.UserMixin):
-    pass
+class User(flask_login.UserMixin, ndb.Model):
+    email = ndb.StringProperty(required=True, indexed=True, repeated=False)
+    password = ndb.StringProperty(required=True, indexed=True)
+    token = ndb.StringProperty(indexed=False)
+    friends = ndb.JsonProperty(indexed=False)
+
+    @property
+    def id(self):
+        return self.email
 
 
 @login_manager.user_loader
 def user_loader(email):
-    if email not in users:
+    """
+    Given the users email, find and
+    return the user
+    """
+    user = User.query(User.email == email).get()
+
+    if not user:
         return
 
-    user = User()
-    user.id = email
     return user
 
 
 @login_manager.request_loader
 def request_loader(request):
-    email = request.form.get('email')
-    if email not in users:
+    user = User.query(
+        User.email == request.args.get('email')
+    ).get()
+
+    if not user:
         return
 
-    user = User()
-    user.id = email
-
-    # DO NOT ever store passwords in plaintext and always compare password
-    # hashes using constant-time comparison!
-    user.is_authenticated = request.form['pw'] == users[email]['pw']
+    user.is_authenticated = False
 
     return user
 

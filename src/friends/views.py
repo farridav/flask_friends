@@ -6,13 +6,36 @@ from flask import (
 )
 from flask.views import View
 
-from .auth import flask_login, User, users
+from .auth import flask_login, User
 from .facebook import facebook, get_friends
 
 
 class Login(View):
 
     def dispatch_request(self):
+        if request.method == 'GET':
+            return render_template('login.html')
+
+        email = request.form.get('email')
+        password = request.form.get('pw')
+        register = request.form.get('register', False)
+
+        user = User.query(
+            User.email == email,
+            User.password == password
+        ).get()
+
+        if not user and register:
+            user = User(email=email, password=password)
+            user.put()
+
+        if user:
+            flask_login.login_user(user)
+            return redirect(url_for('protected'))
+
+        return abort(403)
+
+    def dispatch_request_old(self):
         if request.method == 'GET':
             return render_template('login.html')
 
@@ -110,7 +133,19 @@ class APIFriends(View):
     Endpoint for retrieving our friends list
     """
     def dispatch_request(self):
-        friends = get_friends()
+        """
+        If we are logged in, store and return our friends
+        """
+        if flask_login.current_user:
+
+            if not flask_login.current_user.friends:
+                flask_login.current_user.friends = get_friends()
+                flask_login.current_user.put()
+
+            friends = flask_login.current_user.friends
+        else:
+            friends = get_friends()
+
         return Response(
             json.dumps(friends),
             mimetype='application/json',
