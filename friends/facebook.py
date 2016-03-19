@@ -1,9 +1,10 @@
 import os
 import json
 
+from flask import session
 from flask_oauth import OAuth
 
-from .app import app, THIS_DIR
+from . import app, THIS_DIR
 
 oauth = OAuth()
 
