@@ -35,6 +35,19 @@ Install the requirements (GAE)
 
     pip install -r dev-requirements.txt -t src/lib
 
+### Static files/libs
+I am using bower to manage frontend deps, but dont want too much extra cruft in there,
+so for now, im rsyncing in, as follows:
+
+    npm install bower
+    ./node_modules/bower/bin/bower i
+    rsync -avz ./bower_components/bootstrap/dist/ ./src/friends/static/lib/
+    rsync -avz ./bower_components/jquery/dist/ ./src/friends/static/lib/js/
+    rsync -avz ./bower_components/react/ ./src/friends/static/lib/js/
+    rsync -avz ./bower_components/babel/ ./src/friends/static/lib/js/
+
+https://github.com/twbs/bootstrap/releases/download/v3.3.6/bootstrap-3.3.6-dist.zip
+
 ### Running
 To run this project with all of the mock appengine resources from the appengine SDK, use:
 

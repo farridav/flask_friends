@@ -1,0 +1,24 @@
+{
+  "name": "flask_friends",
+  "homepage": "https://github.com/farridav/flask_friends",
+  "authors": [
+    "David Farrington <info@davidfarrington.co.uk>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "react": "^0.14.7",
+    "babel": "*"
+  }
+}

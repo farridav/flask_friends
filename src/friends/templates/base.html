@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Facebook Friends</title>
 
-    <link href="{{ url_for('static', filename='css/lib/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
 
     <!--[if lt IE 9]>
@@ -45,11 +45,11 @@
       {% block body %}{% endblock %}
     </div>
 
-    <script src="{{ url_for('static', filename='js/lib/react.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/lib/react-dom.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/lib/jquery.1.11.3.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/lib/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/lib/babel-5.8.24.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/js/react.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/js/react-dom.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/js/browser.min.js') }}"></script>
     <script type="text/babel" src="{{ url_for('static', filename='js/app.js') }}"></script>
   </body>
 </html>
