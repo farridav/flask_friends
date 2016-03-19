@@ -6,8 +6,8 @@
 Make sure the following environment variables have been set:
 
     export APP_SECRET_KEY='my-secret-key'
-    export APP_FACEBOOK_APP_ID='yourappid'
-    export APP_FACEBOOK_APP_SECRET='your app secret'
+    export APP_FB_APP_ID='yourappid'
+    export APP_FB_APP_SECRET='your app secret'
 
 A convenient way to do this is in your virtualenvs activate script,
 or as a standalone `.env` file that you manually source

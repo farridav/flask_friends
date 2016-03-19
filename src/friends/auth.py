@@ -1,6 +1,6 @@
 from friends import app
 
-from flask import abort, url_for, redirect
+from flask import url_for, redirect
 import flask.ext.login as flask_login
 
 login_manager = flask_login.LoginManager()

@@ -4,13 +4,13 @@ import json
 from flask import session
 from flask_oauth import OAuth
 
-from . import app, THIS_DIR
+from . import THIS_DIR
 
 oauth = OAuth()
 
-FACEBOOK_APP_ID = os.getenv('APP_FACEBOOK_APP_ID')
-FACEBOOK_APP_SECRET = os.getenv('APP_FACEBOOK_APP_SECRET')
-FACEBOOK_MAX_PAGER = 10
+FB_APP_ID = os.getenv('APP_FB_APP_ID')
+FB_APP_SECRET = os.getenv('APP_FB_APP_SECRET')
+FB_MAX_PAGER = 10
 
 facebook = oauth.remote_app(
     'facebook',
@@ -18,8 +18,8 @@ facebook = oauth.remote_app(
     request_token_url=None,
     access_token_url='/oauth/access_token',
     authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key=FACEBOOK_APP_ID,
-    consumer_secret=FACEBOOK_APP_SECRET,
+    consumer_key=FB_APP_ID,
+    consumer_secret=FB_APP_SECRET,
     request_token_params={'scope': 'user_friends'}
 )
 
@@ -42,13 +42,14 @@ def get_friends():
     # Populate cache
     pager = 0
     data = facebook.get(
-        '/me/?fields=name,friends,taggable_friends{name,picture{url}}&limit=100'
+        '/me/?fields=name,friends,'
+        'taggable_friends{name,picture{url}}&limit=100'
     ).data
 
     friends = data['taggable_friends']['data']
+    total_friends = int(data['friends']['summary']['total_count'])
 
-    while (len(friends) < int(data['friends']['summary']['total_count'])
-           and pager < FACEBOOK_MAX_PAGER):
+    while (len(friends) < total_friends and pager < FB_MAX_PAGER):
         friends.extend(facebook.get(
             data['taggable_friends']['paging']['next']
         ).data['data'])

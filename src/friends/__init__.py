@@ -13,4 +13,4 @@ app.secret_key = os.getenv('APP_SECRET_KEY')
 login_manager = login.LoginManager()
 login_manager.init_app(app)
 
-import urls
+import urls  # NOQA

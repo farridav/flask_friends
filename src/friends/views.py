@@ -6,7 +6,6 @@ from flask import (
 )
 from flask.views import View
 
-from . import app
 from .auth import flask_login, User, users
 from .facebook import facebook, get_friends
 
@@ -20,7 +19,6 @@ class Login(View):
         user = None
         email = request.form.get('email')
         password = request.form.get('pw')
-        register = request.form.get('register')
 
         if email in users and users.get(email)['pw'] == password:
             user = User()
@@ -73,15 +71,21 @@ class Home(View):
 class FacebookAuthorized(View):
 
     @facebook.authorized_handler
-    def dispatch_request(self, request):
-        if resp is None:
+    def dispatch_request(response, self):
+        """
+        Receive the callback from facebook with our
+        access_token
+
+        N.B - decorator is returning args backwards :(
+        """
+        if response is None:
             return '{} [{}]'.format(
-                request.args['error_reason'],
-                request.args['error_description']
+                response.get('error_reason'),
+                response.get('error_description')
             )
 
         # TODO: persist this into the db?
-        session['oauth_token'] = (request['access_token'], '')
+        session['oauth_token'] = (response['access_token'], '')
 
         return redirect(url_for('friends'))
 

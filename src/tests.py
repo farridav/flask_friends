@@ -1,12 +1,9 @@
-#!/usr/bin/env python
+from unittest import TestCase
 
-import os
 from friends import app
-import unittest
-import tempfile
 
 
-class AppTestCase(unittest.TestCase):
+class AppTestCase(TestCase):
 
     def setUp(self):
         self.app = app.test_client()
