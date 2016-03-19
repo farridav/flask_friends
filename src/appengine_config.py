@@ -7,13 +7,12 @@ import os
 import yaml
 from google.appengine.ext import vendor
 
-ENV_YML = os.path.join(
-    os.path.dirname(__file__), 'env.yaml'
-)
+THIS_DIR = os.path.dirname(__file__)
+ENV_YML = os.path.join(THIS_DIR, 'env.yaml')
 
 # Third-party libraries are stored in "lib", vendoring will make
 # sure that they are importable by the application.
-vendor.add('lib')
+vendor.add(os.path.join(THIS_DIR, 'lib'))
 
 # Load in env vars if found
 if os.path.isfile(ENV_YML):

@@ -35,24 +35,6 @@ class Login(View):
 
         return abort(403)
 
-    def dispatch_request_old(self):
-        if request.method == 'GET':
-            return render_template('login.html')
-
-        user = None
-        email = request.form.get('email')
-        password = request.form.get('pw')
-
-        if email in users and users.get(email)['pw'] == password:
-            user = User()
-            user.id = email
-
-        if user:
-            flask_login.login_user(user)
-            return redirect(url_for('protected'))
-
-        return abort(403)
-
 
 class Logout(View):
 

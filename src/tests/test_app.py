@@ -1,21 +1,42 @@
-import os
 from unittest import TestCase
 
+from google.appengine.ext import testbed
+
 from friends import app
+from friends.auth import User
 
 
 class AppTestCase(TestCase):
 
-    def setUp(self):
-        self.app = app.test_client()
+    @classmethod
+    def setUpClass(cls):
+        cls.app = app.test_client()
+        cls.testbed = testbed.Testbed()
+        cls.testbed.activate()
+        cls.testbed.init_datastore_v3_stub()
+        cls.testbed.init_user_stub()
+        cls.testbed.init_memcache_stub()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.testbed.deactivate()
 
     def login(self, email, pw):
+        """
+        Make a user if we need to, and log them in
+        """
+        user = User.get_or_insert(
+            email, email=email, password=pw)
+
         return self.app.post('/login', data=dict(
-            email=email,
-            pw=pw
+            email=user.email,
+            pw=user.password
         ), follow_redirects=True)
 
     def logout(self):
+        """
+        Log our user out (via the view)
+        """
         return self.app.get('/logout', follow_redirects=True)
 
     def test_redirect_to_social_login(self):
@@ -51,6 +72,8 @@ class AppTestCase(TestCase):
             'Welcome {}'.format(email), response.data
         )
 
+        self.logout()
+
     def test_protected_view_accessible(self):
         """
         Our protected view can be accessed when logged in
@@ -60,3 +83,5 @@ class AppTestCase(TestCase):
         response = self.app.get('/protected')
 
         self.assertEqual(response.status_code, 200)
+
+        self.logout()

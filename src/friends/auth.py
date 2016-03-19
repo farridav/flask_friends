@@ -1,6 +1,6 @@
 from google.appengine.ext import ndb
 
-from flask import abort, url_for, redirect
+from flask import url_for, redirect
 import flask.ext.login as flask_login
 
 from . import login_manager
