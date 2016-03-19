@@ -1,0 +1,14 @@
+#!/bin/bash -e
+
+echo "Running python deps"
+pip install -r dev-requirements.txt -t src/lib
+
+echo "Running bower deps"
+npm install bower
+
+./node_modules/bower/bin/bower i
+
+rsync -avz ./bower_components/bootstrap/dist/ ./src/friends/static/lib/
+rsync -avz ./bower_components/jquery/dist/ ./src/friends/static/lib/js/
+rsync -avz ./bower_components/react/ ./src/friends/static/lib/js/
+rsync -avz ./bower_components/babel/ ./src/friends/static/lib/js/
