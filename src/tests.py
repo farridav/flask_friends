@@ -22,22 +22,24 @@ class AppTestCase(unittest.TestCase):
 
     def test_redirect_to_social_login(self):
         """
-        Viewing the homepage gives us a 302 Found, and
-        redirects us to /social-login
+        Viewing the friends page, we get a redirect to
+        the facebook auth dialog
         """
-        response = self.app.get('/')
+        response = self.app.get('/friends')
 
         self.assertEqual(response.status_code, 302)
-        self.assertTrue('social-login' in response.location)
+        self.assertTrue(response.location.startswith(
+            'https://www.facebook.com/dialog/oauth'
+        ))
 
     def test_protected_view_locked_down(self):
         """
         Our protected view, is
         """
         response = self.app.get('/protected')
-        import ipdb; ipdb.set_trace()
 
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('login' in response.location)
 
     def test_login_view(self):
         """

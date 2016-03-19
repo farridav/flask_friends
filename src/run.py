@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 
 from friends import app
-from friends.views import (
-    login, logout, home,
-    facebook_authorized, api_friends
-)
 
-app.run()
+if __name__ == '__main__':
+    app.run()
