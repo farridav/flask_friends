@@ -2,7 +2,11 @@
 
 import os
 import sys
+
 import yaml
+import nose
+from flake8.engine import get_style_guide
+from flake8.main import DEFAULT_CONFIG, print_report
 
 THIS_DIR = os.path.dirname(__file__)
 ENV_YML = os.path.join(THIS_DIR, 'env.yaml')
@@ -19,8 +23,23 @@ sys.path.insert(1, os.path.join(THIS_DIR, 'friends'))
 
 import dev_appserver
 import friends
+import tests
 
 dev_appserver.fix_sys_path()
 
 if __name__ == '__main__':
-    friends.app.run(debug=True)
+    """
+    Run flake8 checks. then nosetests
+    """
+    flake8_style = get_style_guide(
+        exclude=['lib'], config_file=DEFAULT_CONFIG
+    )
+    report = flake8_style.check_files('./')
+    if report.total_errors > 0:
+        print_report(report, flake8_style)
+        sys.exit(1)
+
+    # being too greedy
+    failures = nose.main()
+    if failures > 0:
+        sys.exit(1)

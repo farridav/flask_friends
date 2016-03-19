@@ -3,14 +3,13 @@
 ## Getting Started
 
 ### Development
-Make sure the following environment variables have been set:
+Make sure the following environment variables have been set in src/env.yaml:
 
-    export APP_SECRET_KEY='my-secret-key'
-    export APP_FB_APP_ID='yourappid'
-    export APP_FB_APP_SECRET='your app secret'
+    APP_SECRET_KEY: 'my-secret-key'
+    APP_FB_APP_ID: 'yourappid'
+    APP_FB_APP_SECRET: 'your app secret'
 
-A convenient way to do this is in your virtualenvs activate script,
-or as a standalone `.env` file that you manually source
+N.B - This file is kept out of version control
 
 Setup a virtualenv, e.g:-
 
@@ -22,6 +21,15 @@ Install the requirements and the test requirements
 
     pip install -r requirements.txt
     pip install -r test-requirements.txt
+
+### Running
+To run this project with all of the mock appengine resources from the appengine SDK, use:
+
+    dev_appserver.py src/
+
+To run it directly use:
+
+    python src/run.py
 
 ### Google Cloud platform
 This project has been built to work with Googles cloud platform,
@@ -35,9 +43,13 @@ Now setup gcloud with:
 
     gcloud init
 
+install requirements here
+
+    pip install -r requirements.txt -t src/lib/
+
+
 ### Testing
 
 Run flake8, and the tests with:
 
-    flake8 --exclude .venv
-    ./tests.py
+    ./src/runtests.py
