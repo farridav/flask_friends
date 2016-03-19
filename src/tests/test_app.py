@@ -21,6 +21,9 @@ class AppTestCase(TestCase):
     def tearDownClass(cls):
         cls.testbed.deactivate()
 
+    def tearDown(self):
+        self.logout()
+
     def login(self, email, pw):
         """
         Make a user if we need to, and log them in
@@ -31,7 +34,7 @@ class AppTestCase(TestCase):
         return self.app.post('/login', data=dict(
             email=user.email,
             pw=user.password
-        ), follow_redirects=True)
+        ))
 
     def logout(self):
         """
@@ -41,9 +44,12 @@ class AppTestCase(TestCase):
 
     def test_redirect_to_social_login(self):
         """
-        Viewing the friends page, we get a redirect to
-        the facebook auth dialog
+        Viewing the friends page as a logged in user,
+        we get a redirect to the facebook auth
         """
+
+        self.login('david@test.com', 'david')
+
         response = self.app.get('/friends')
 
         self.assertEqual(response.status_code, 302)
@@ -51,11 +57,12 @@ class AppTestCase(TestCase):
             'https://www.facebook.com/dialog/oauth'
         ))
 
-    def test_protected_view_locked_down(self):
+    def test_friends_view_locked_down(self):
         """
-        Our protected view, is
+        Our friends view redirects us to login,
+        if we are not already logged in
         """
-        response = self.app.get('/protected')
+        response = self.app.get('/friends')
 
         self.assertEqual(response.status_code, 302)
         self.assertTrue('login' in response.location)
@@ -67,21 +74,16 @@ class AppTestCase(TestCase):
         email = 'david@test.com'
         response = self.login(email, 'david')
 
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(
-            'Welcome {}'.format(email), response.data
-        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('friends' in response.location)
 
-        self.logout()
-
-    def test_protected_view_accessible(self):
+    def test_friends_view_accessible(self):
         """
-        Our protected view can be accessed when logged in
+        Our friends view can be accessed when logged in
         """
         self.login('david@test.com', 'david')
 
-        response = self.app.get('/protected')
+        response = self.app.get('/friends')
 
-        self.assertEqual(response.status_code, 200)
-
-        self.logout()
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('friends' in response.location)

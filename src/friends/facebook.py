@@ -1,10 +1,7 @@
 import os
-import json
 
 from flask import session
 from flask_oauth import OAuth
-
-from . import THIS_DIR
 
 oauth = OAuth()
 
@@ -30,15 +27,6 @@ def get_friends():
     exhausted the API (or we hit our pager limit)
     """
 
-    cache = os.path.join(THIS_DIR, 'cache.json')
-
-    if os.path.isfile(cache):
-        data = json.load(open(cache))
-        return {
-            'name': data['name'],
-            'friends': data['taggable_friends']['data'],
-        }
-
     # Populate cache
     pager = 0
     data = facebook.get(
@@ -55,9 +43,6 @@ def get_friends():
         ).data['data'])
 
         pager += 1
-
-    with open(cache, 'wb+') as f:
-        f.write(json.dumps(data))
 
     return {
         'name': data['name'],

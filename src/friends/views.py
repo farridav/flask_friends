@@ -31,7 +31,7 @@ class Login(View):
 
         if user:
             flask_login.login_user(user)
-            return redirect(url_for('protected'))
+            return redirect(url_for('friends'))
 
         return abort(403)
 
@@ -49,18 +49,6 @@ class Logout(View):
             'page_title': 'Logged Out',
             'content': 'Bye {}'.format(
                 user_id
-            )
-        })
-
-
-class Protected(View):
-
-    @flask_login.login_required
-    def dispatch_request(self):
-        return render_template('basic.html', **{
-            'page_title': 'Logged In',
-            'content': 'Welcome {}'.format(
-                flask_login.current_user.id
             )
         })
 
@@ -97,6 +85,7 @@ class FacebookAuthorized(View):
 
 class Friends(View):
 
+    @flask_login.login_required
     def dispatch_request(self):
         if 'oauth_token' in session:
             return render_template('friends.html')
@@ -114,19 +103,19 @@ class APIFriends(View):
     """
     Endpoint for retrieving our friends list
     """
+
+    @flask_login.login_required
     def dispatch_request(self):
         """
         If we are logged in, store and return our friends
         """
-        if flask_login.current_user:
 
-            if not flask_login.current_user.friends:
-                flask_login.current_user.friends = get_friends()
-                flask_login.current_user.put()
+        # If we dont yet have friends, get some :)
+        if not flask_login.current_user.friends:
+            flask_login.current_user.friends = get_friends()
+            flask_login.current_user.put()
 
-            friends = flask_login.current_user.friends
-        else:
-            friends = get_friends()
+        friends = flask_login.current_user.friends
 
         return Response(
             json.dumps(friends),

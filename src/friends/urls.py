@@ -17,10 +17,6 @@ app.add_url_rule(
     view_func=views.Logout.as_view('logout')
 )
 app.add_url_rule(
-    '/protected', 'protected',
-    view_func=views.Protected.as_view('protected')
-)
-app.add_url_rule(
     '/facebook/authorized', 'facebook_authorized',
     view_func=views.FacebookAuthorized.as_view('facebook_authorized')
 )
