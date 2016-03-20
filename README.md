@@ -21,7 +21,7 @@ And setup gcloud with:
 
     gcloud init
 
-### Development
+### Configuration
 Make sure the following environment variables have been set in src/env.yaml:
 
     APP_SECRET_KEY: 'my-secret-key'
@@ -29,7 +29,7 @@ Make sure the following environment variables have been set in src/env.yaml:
     FB_APP_SECRET: 'your app secret'
     SDK_PATH: '/path/to/google_appengine/'
 
-N.B - This file is kept out of version control
+N.B - These values will change for production and development, and are kept out of version control
 
 ### Static files/libs
 
@@ -53,14 +53,4 @@ For the first time:
 
 Subsequent times:
 
-    appcfg.py set_default_version -V v1 -A flask-friends
-
-
-
-
-Add callback going to:
-
-https://flask-friends.appspot.com/api/friends/webook
-
-
-Make test fb app for local dev
+    appcfg.py set_default_version -V v<new_version no> -A flask-friends
