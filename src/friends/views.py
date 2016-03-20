@@ -1,4 +1,5 @@
 import json
+from time import sleep
 
 from flask import (
     redirect, url_for, session, request,
@@ -31,6 +32,11 @@ class Login(View):
 
         if user:
             flask_login.login_user(user)
+
+            # TODO: fix race condition,
+            # perhaps with signals
+            sleep(2)
+
             return redirect(url_for('friends'))
 
         return render_template('basic.html', **{
@@ -128,3 +134,8 @@ class APIFriends(View):
                 'Access-Control-Allow-Origin': '*'
             }
         )
+
+
+class APIFriendsWebHook(View):
+    def dispatch_request(self):
+        return 'ok webhook called'

@@ -28,3 +28,8 @@ app.add_url_rule(
     '/api/friends', 'api_friends',
     view_func=views.APIFriends.as_view('api_friends')
 )
+
+app.add_url_rule(
+    '/api/friends/webhook', 'api_friends_webhook',
+    view_func=views.APIFriendsWebHook.as_view('api_friends_webhook')
+)

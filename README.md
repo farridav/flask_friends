@@ -47,4 +47,20 @@ Run flake8, and the tests with:
     ./src/runtests.py
 
 ### Deploying
-This project has not yet been deployed, and has been developed solely using the SDK, a deployment guide can be found [here](https://github.com/GoogleCloudPlatform/appengine-flask-skeleton#deploy)
+For the first time:
+
+    appcfg.py update -A flask-friends -V v1 src/
+
+Subsequent times:
+
+    appcfg.py set_default_version -V v1 -A flask-friends
+
+
+
+
+Add callback going to:
+
+https://flask-friends.appspot.com/api/friends/webook
+
+
+Make test fb app for local dev
