@@ -5,8 +5,8 @@ from flask_oauth import OAuth
 
 oauth = OAuth()
 
-FB_APP_ID = os.getenv('APP_FB_APP_ID')
-FB_APP_SECRET = os.getenv('APP_FB_APP_SECRET')
+FB_APP_ID = os.getenv('FB_APP_ID')
+FB_APP_SECRET = os.getenv('FB_APP_SECRET')
 FB_MAX_PAGER = 10
 
 facebook = oauth.remote_app(

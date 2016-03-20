@@ -25,8 +25,8 @@ And setup gcloud with:
 Make sure the following environment variables have been set in src/env.yaml:
 
     APP_SECRET_KEY: 'my-secret-key'
-    APP_FB_APP_ID: 'yourappid'
-    APP_FB_APP_SECRET: 'your app secret'
+    FB_APP_ID: 'yourappid'
+    FB_APP_SECRET: 'your app secret'
     SDK_PATH: '/path/to/google_appengine/'
 
 N.B - This file is kept out of version control
