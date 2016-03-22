@@ -7,3 +7,4 @@ cache.json
 src/env.yaml
 node_modules
 bower_components
+_resource

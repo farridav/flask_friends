@@ -6,6 +6,7 @@ import unittest
 
 THIS_DIR = os.path.dirname(__file__)
 ENV_YML = os.path.join(THIS_DIR, 'env.yaml')
+GIT_IGNORE = os.path.join(THIS_DIR, '../', '.gitignore')
 
 # Add our library paths
 sys.path.insert(1, os.path.join(THIS_DIR, 'lib'))
@@ -37,7 +38,10 @@ if __name__ == '__main__':
     Run flake8 checks. then nosetests
     """
     flake8_style = get_style_guide(
-        exclude=['lib', '.venv'], config_file=DEFAULT_CONFIG
+        exclude=','.join([
+            l.strip() for l in
+            open(GIT_IGNORE).readlines()
+        ]), config_file=DEFAULT_CONFIG
     )
     report = flake8_style.check_files('./')
     if report.total_errors > 0:

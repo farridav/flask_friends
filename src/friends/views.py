@@ -39,10 +39,10 @@ class Login(View):
 
             return redirect(url_for('friends'))
 
-        return render_template('basic.html', **{
+        return Response(render_template('basic.html', **{
             'page_title': 'Access Denied',
             'content': 'Wrong username and/or password'
-        })
+        }), status=401)
 
 
 class Logout(View):
