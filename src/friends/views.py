@@ -1,17 +1,21 @@
 import json
+import os
 from time import sleep
 
 from flask import (
     redirect, url_for, session, request,
-    render_template, Response
+    render_template, Response, abort, views
 )
-from flask.views import View
 
 from .auth import flask_login, User
 from .facebook import facebook, get_friends
 
 
-class Login(View):
+class Login(views.View):
+    """
+    GET our login page, or with POST, Log our user
+    in, optionally registering them first
+    """
 
     def dispatch_request(self):
         if request.method == 'GET':
@@ -45,7 +49,11 @@ class Login(View):
         }), status=401)
 
 
-class Logout(View):
+class Logout(views.View):
+    """
+    Log our user out, if we dont have a user, move on
+    gracefully with 'Anonymous'
+    """
 
     def dispatch_request(self):
         user_id = getattr(
@@ -62,9 +70,11 @@ class Logout(View):
         }), status=200)
 
 
-class Home(View):
+class Home(views.View):
     """
-    Load our home page, Should be served as static really
+    Load our home page
+
+    N.B - Could be served as static
     """
     def dispatch_request(self):
         return Response(
@@ -72,15 +82,18 @@ class Home(View):
         )
 
 
-class FacebookAuthorized(View):
+class FacebookAuthorized(views.View):
+    """
+    Receive the callback from facebook with our
+    access_token
+    """
 
     @facebook.authorized_handler
     def dispatch_request(response, self):
         """
-        Receive the callback from facebook with our
-        access_token
-
         N.B - decorator is returning args backwards :(
+
+        TODO: persist oauth_token into db?
         """
         if response is None:
             return '{} [{}]'.format(
@@ -88,13 +101,17 @@ class FacebookAuthorized(View):
                 response.get('error_description')
             )
 
-        # TODO: persist this into the db?
         session['oauth_token'] = (response['access_token'], '')
 
         return redirect(url_for('friends'))
 
 
-class Friends(View):
+class Friends(views.View):
+    """
+    Render out our friends page
+
+    N.B Could be static, as friends are fetch from API
+    """
 
     @flask_login.login_required
     def dispatch_request(self):
@@ -110,9 +127,9 @@ class Friends(View):
 
 # API Routes
 
-class APIFriends(View):
+class APIFriends(views.View):
     """
-    Endpoint for retrieving our friends list
+    Protected API endpoint for retrieving our friends list
     """
 
     @flask_login.login_required
@@ -138,8 +155,26 @@ class APIFriends(View):
         )
 
 
-class APIFriendsWebHook(View):
+class APIFriendsWebHook(views.View):
+    """
+    The webhook facebook will receive POST from facebook when a
+    users friends have been updated, take the updates, and store
+    them against our users db stored friends
+    """
     def dispatch_request(self):
-        return Response(
-            'ok webhook called', status=200
-        )
+        their_token = request.args.get('hub.verify_token', '')
+        our_token = os.getenv('FB_CALLBACK_TOKEN')
+
+        if their_token != our_token:
+            abort(401)
+
+        # GET's are used for endpoint verification,
+        # return with our thing
+        if request.method == 'GET':
+            response = request.args.get('hub.something?', '')
+
+        # Deal with the response (hub.something?)
+        if request.method == 'POST':
+            response = ''
+
+        return Response(response, status=200)
