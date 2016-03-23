@@ -55,7 +55,7 @@ class AppTestCase(TestCase):
 
         return self.app.post('/login', data=dict(
             email=user.email,
-            pw=user.password
+            pw=pw
         ))
 
     def logout(self):
