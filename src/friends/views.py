@@ -54,12 +54,12 @@ class Logout(View):
 
         flask_login.logout_user()
 
-        return render_template('basic.html', **{
+        return Response(render_template('basic.html', **{
             'page_title': 'Logged Out',
             'content': 'Bye {}'.format(
                 user_id
             )
-        })
+        }), status=200)
 
 
 class Home(View):
@@ -67,7 +67,9 @@ class Home(View):
     Load our home page, Should be served as static really
     """
     def dispatch_request(self):
-        return render_template('home.html')
+        return Response(
+            render_template('home.html'), status=200
+        )
 
 
 class FacebookAuthorized(View):
@@ -132,10 +134,12 @@ class APIFriends(View):
             headers={
                 'Cache-Control': 'no-cache',
                 'Access-Control-Allow-Origin': '*'
-            }
+            }, status=200
         )
 
 
 class APIFriendsWebHook(View):
     def dispatch_request(self):
-        return 'ok webhook called'
+        return Response(
+            'ok webhook called', status=200
+        )
