@@ -5,6 +5,7 @@
 lib
 cache.json
 src/env.yaml
+src/test_env.yaml
 node_modules
 bower_components
 _resource

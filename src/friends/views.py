@@ -93,17 +93,33 @@ class FacebookAuthorized(views.View):
         """
         N.B - decorator is returning args backwards :(
 
-        TODO: persist oauth_token into db?
+        TODO:
+          - persist oauth_token into db, to outlive session
+
         """
         if response is None:
             return '{} [{}]'.format(
-                response.get('error_reason'),
-                response.get('error_description')
+                request.args.get('error_reason', 'Error'),
+                request.args.get('error_description', 'Unknown')
             )
 
         session['oauth_token'] = (response['access_token'], '')
 
         return redirect(url_for('friends'))
+
+
+class FacebookDeAuthorized(views.View):
+    """
+    A User has deauthorized our application
+
+    TODO:
+      - Mark the user as inactive,
+      - Clear their token,
+      - Unsubscribe to updates about their friends
+    """
+
+    def dispatch_request(self):
+        return Response('ok', status=200)
 
 
 class Friends(views.View):
@@ -171,7 +187,7 @@ class APIFriendsWebHook(views.View):
         # GET's are used for endpoint verification,
         # return with our thing
         if request.method == 'GET':
-            response = request.args.get('hub.something?', '')
+            response = request.args.get('hub.verify_token', '')
 
         # Deal with the response (hub.something?)
         if request.method == 'POST':

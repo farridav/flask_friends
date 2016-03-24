@@ -5,7 +5,7 @@ import sys
 import unittest
 
 THIS_DIR = os.path.dirname(__file__)
-ENV_YML = os.path.join(THIS_DIR, 'env.yaml')
+ENV_YML = os.path.join(THIS_DIR, 'test_env.yaml')
 GIT_IGNORE = os.path.join(THIS_DIR, '../', '.gitignore')
 
 # Add our library paths

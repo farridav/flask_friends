@@ -21,6 +21,10 @@ app.add_url_rule(
     view_func=views.FacebookAuthorized.as_view('facebook_authorized')
 )
 app.add_url_rule(
+    '/facebook/deauthorized', 'facebook_deauthorized',
+    view_func=views.FacebookDeAuthorized.as_view('facebook_deauthorized')
+)
+app.add_url_rule(
     '/friends', 'friends',
     view_func=views.Friends.as_view('friends')
 )

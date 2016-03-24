@@ -29,6 +29,9 @@ Make sure the following environment variables have been set in src/env.yaml:
     FB_APP_SECRET: 'your app secret'
     SDK_PATH: '/path/to/google_appengine/'
 
+And for running the tests, we will need a similar file, called src/test_env.yml, this should
+contain values sane enough for testing with
+
 N.B - These values will change for production and development, and are kept out of version control
 
 ### Static files/libs

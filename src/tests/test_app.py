@@ -162,3 +162,50 @@ class AppTestCase(TestCase):
             self.app.get('/api/friends')
 
         self.assertEqual(facebook.get.call_count, 1)
+
+    def test_facebook_webhook_verification(self):
+        """
+        When we (poasing as facebook) hit our callback endpoint
+        with GET, we have to confirm verify token and return
+        """
+        self.login('david@test.com', 'david')
+        token = 'testing'
+        os.environ['FB_CALLBACK_TOKEN'] = token
+
+        response = self.app.get(
+            '/api/friends/webhook?hub.verify_token={}'.format(
+                token
+            )
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, token)
+
+    def test_facebook_callback_auth(self):
+        """
+        Smoketest facebook auth calllback
+
+        N.B - Does not test any part of the oAuth flow
+        """
+        self.login('david@test.com', 'david')
+
+        response = self.app.get('/facebook/authorized')
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_facebook_deauth(self):
+        """
+        Test we can deauthorize a user and clean up after
+        them
+
+        TODO:
+            - Assert user marked as inactive
+            - Assert token removed
+            - Assert webhook unsubscribed?
+        """
+        self.login('david@test.com', 'david')
+
+        response = self.app.get('/facebook/deauthorized')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, 'ok')
