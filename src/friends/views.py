@@ -34,7 +34,7 @@ class Login(views.View):
             user = User(email=email, password=password)
             user.put()
 
-        if user:
+        if user and user.is_authenticated:
             flask_login.login_user(user)
 
             # TODO: fix race condition,

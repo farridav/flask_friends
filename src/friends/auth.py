@@ -44,20 +44,6 @@ def user_loader(email):
     return user
 
 
-@login_manager.request_loader
-def request_loader(request):
-    user = User.query(
-        User.email == request.args.get('email')
-    ).get()
-
-    if not user:
-        return
-
-    user.is_authenticated = False
-
-    return user
-
-
 @login_manager.unauthorized_handler
 def unauthorized_handler():
     return redirect(url_for('login'))
