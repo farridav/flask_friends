@@ -50,10 +50,10 @@ Run flake8, and the tests with:
     ./src/runtests.py
 
 ### Deploying
-For the first time:
+To ship the new version of your application, bump the `version` in src/app.yaml and:
 
-    appcfg.py update -A flask-friends -V v1 src/
+    appcfg.py update -A flask-friends -V v<new_version no> src/
 
-Subsequent times:
+And to switch it over:
 
     appcfg.py set_default_version -V v<new_version no> -A flask-friends
