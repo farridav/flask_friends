@@ -1,5 +1,4 @@
 from unittest import TestCase
-import json
 import os
 
 from google.appengine.ext import testbed
@@ -9,7 +8,7 @@ from mock import patch, Mock
 from friends import app
 from friends.auth import User
 
-THIS_DIR = os.path.dirname(__file__)
+from tests.factories import friends_json
 
 
 class AppTestCase(TestCase):
@@ -151,12 +150,9 @@ class AppTestCase(TestCase):
         (unless we require pagination, which our test data doesnt)
         """
         self.login('david@test.com', 'david')
-        mock_data = json.load(
-            open(os.path.join(THIS_DIR, 'friends.json'))
-        )
 
         with patch('friends.facebook.facebook') as facebook:
-            facebook.get.return_value = Mock(data=mock_data)
+            facebook.get.return_value = Mock(data=friends_json())
             # Call the friends list multiple times
             self.app.get('/api/friends')
             self.app.get('/api/friends')

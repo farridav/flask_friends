@@ -33,10 +33,8 @@ import dev_appserver  # NOQA
 
 dev_appserver.fix_sys_path()
 
-if __name__ == '__main__':
-    """
-    Run flake8 checks. then nosetests
-    """
+
+def flake8():
     flake8_style = get_style_guide(
         exclude=','.join([
             l.strip() for l in
@@ -48,6 +46,8 @@ if __name__ == '__main__':
         print_report(report, flake8_style)
         sys.exit(1)
 
+
+def tests():
     runner = unittest.TextTestRunner(verbosity=2)
     tests = unittest.loader.TestLoader().discover(
         os.path.join(THIS_DIR, 'tests')
@@ -56,3 +56,11 @@ if __name__ == '__main__':
 
     if failures > 0:
         sys.exit(1)
+
+
+if __name__ == '__main__':
+    """
+    Run flake8 checks. then nosetests
+    """
+    flake8()
+    tests()
