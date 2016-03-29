@@ -26,27 +26,21 @@ def get_friends():
     Get Our friends list, and keep following next hyperlinks until we have
     exhausted the API (or we hit our pager limit)
     """
-
-    # Populate cache
     pager = 0
-    data = facebook.get(
-        '/me/?fields=name,friends,'
-        'taggable_friends{name,picture{url}}&limit=100'
-    ).data
+    url = '/me/taggable_friends?fields=name,picture{url}'
+    data = facebook.get(url).data
+    friends = data['data']
 
-    friends = data['taggable_friends']['data']
-    total_friends = int(data['friends']['summary']['total_count'])
-
-    while (len(friends) < total_friends and pager < FB_MAX_PAGER):
-        friends.extend(facebook.get(
-            data['taggable_friends']['paging']['next']
-        ).data['data'])
-
+    while ('next' in data['paging']) and pager < FB_MAX_PAGER:
+        next = '{}&after={}'.format(
+            url, data['paging']['cursors']['after']
+        )
+        data = facebook.get(next).data
+        friends.extend(data['data'])
         pager += 1
 
     return {
-        'name': data['name'],
-        'friends': data['taggable_friends']['data'],
+        'friends': friends
     }
 
 
