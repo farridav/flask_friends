@@ -27,17 +27,9 @@ class FaceBookTestCase(TestCase):
 
             facebook.get.return_value = Mock(data=data)
 
-            # Double our friends
-            friends_count = data['friends']['summary']['total_count']
-            new_friends_count = int(friends_count) + len(data['data'])
-            data['friends']['summary']['total_count'] = new_friends_count
-
             # Call the friends list multiple times
             friends = get_friends()
             names = [f['name'] for f in friends['friends']]
-
-        # Assert we have all of our friends
-        self.assertEqual(len(friends['friends']), new_friends_count)
 
         # Assert our two new friends made it into the response
         self.assertTrue('Lenny Henry' in names)

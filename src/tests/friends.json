@@ -1,39 +1,28 @@
 {
-  "taggable_friends": {
-    "paging": {
-      "cursors": {
-        "after": "QWFKQkFNQXQ2ZAG95c1ZAHUFdKbzY5TFA2U1oxckRGM3U3d1pxa0d0NTNzYkRnSkY1a3plLW1BSFlZAbGd6bmQtQ2x3REloaUpRVC1LVHI5RFVNdENqR3h0eklFUFg2dkgyZAE0zdlNPYVFkaVJJU3cZD",
-        "before": "QWFKcTc3SmhsOWkxZAjJ2ZAVp5VVFIdjB5LVFqTlh6cE9Kc185bi1pMXUxakZAvX3RoaDR4WVRHSzdOdURqQkcyc3hGdmhlTExWWldZAWTJEM291MFV0X1BadGdWN2Nxc3I1RHJBeHllN2ZAIa19ybWcZD"
-      },
-      "next": "https://graph.facebook.com/v2.5/10153819661586072/taggable_friends?fields=name%2Cpicture%7Burl%7D&limit=25&after=QWFKQkFNQXQ2ZAG95c1ZAHUFdKbzY5TFA2U1oxckRGM3U3d1pxa0d0NTNzYkRnSkY1a3plLW1BSFlZAbGd6bmQtQ2x3REloaUpRVC1LVHI5RFVNdENqR3h0eklFUFg2dkgyZAE0zdlNPYVFkaVJJU3cZD"
-    },
-    "data": [
-      {
-        "picture": {
-          "data": {
-            "url": "friend.jpg"
-          }
-        },
-        "name": "Friend Name",
-        "id": "friend_id"
-      },
-      {
-        "picture": {
-          "data": {
-            "url": "friend2.jpg"
-          }
-        },
-        "name": "Friend2 Name",
-        "id": "friend2_id"
+  "data": [
+    {
+      "id": "friend_id",
+      "name": "Friend Name",
+      "picture": {
+        "data": {
+          "url": "friend.jpg"
+        }
       }
-    ]
-  },
-  "friends": {
-    "data": [],
-    "summary": {
-      "total_count": 2
+    },
+    {
+      "id": "friend2_id",
+      "name": "Friend2 Name",
+      "picture": {
+        "data": {
+          "url": "friend2.jpg"
+        }
+      }
     }
-  },
-  "name": "Users Name",
-  "id": "users_id"
+  ],
+  "paging": {
+    "cursors": {
+      "before": "QWFKcTc3SmhsOWkxZAjJ2ZAVp5VVFIdjB5LVFqTlh6cE9Kc185bi1pMXUxakZAvX3RoaDR4WVRHSzdOdURqQkcyc3hGdmhlTExWWldZAWTJEM291MFV0X1BadGdWN2Nxc3I1RHJBeHllN2ZAIa19ybWcZD",
+      "after": "QWFKQkFNQXQ2ZAG95c1ZAHUFdKbzY5TFA2U1oxckRGM3U3d1pxa0d0NTNzYkRnSkY1a3plLW1BSFlZAbGd6bmQtQ2x3REloaUpRVC1LVHI5RFVNdENqR3h0eklFUFg2dkgyZAE0zdlNPYVFkaVJJU3cZD"
+    }
+  }
 }
